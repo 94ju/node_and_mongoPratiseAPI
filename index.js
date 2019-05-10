@@ -11,4 +11,7 @@ app.get('/api/courses',(req,res)=>{
 app.get('/api/courses/:id',(req,res)=>{
     res.send(req.params.id);
 });
+app.get('/api/courses/posts/:year/:month',(req,res)=>{
+    res.send(req.params);
+})
 app.listen(3000);
