@@ -60,6 +60,13 @@ app.put('/api/courses/:id',(req,res)=>{
     //return the update course
     res.send(course);
 });
+app.delete('/api/courses/:id',(req,res)=>{
+    const id=parseInt(req.params.id);
+    const course=courses.find(c=>c.id===id);
+    const index =courses.indexOf(course);
+    courses.splice(index,1);
+    res.send(course)
+})
 const validateCourse=(course)=>{
     const schema={
         name:Joi.string().min(3).required()
