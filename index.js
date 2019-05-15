@@ -1,13 +1,18 @@
 const Joi =require('joi');
 const log=  require('./logger');
 const helmet = require('helmet');
+const morgan =require('morgan');
 const authenticate = require('./Authenticatin');
 const express=require('express');
 const app = express();
+var fs = require('fs')
+
 app.use(express.json());
 app.use(log);
 app.use(authenticate);
 app.use(helmet());
+app.use(morgan('short'));
+app.use(morgan('common', {stream: fs.createWriteStream('./access.log', {flags: 'a'})}));
 app.use(express.static('public'));
 const courses=[
     {id:1,name:'maths'},
