@@ -13,6 +13,9 @@ app.use(express.json());
 app.use(log);
 app.use(authenticate);
 app.use(helmet());
+//Configuration
+console.log('Application name:'+ config.get('name'));
+console.log('Mail server:'+ config.get('mail.host'));
 
 if(app.get('env')==='development'){
     var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
