@@ -1,11 +1,13 @@
 const Joi =require('joi');
 const log=  require('./logger');
+const helmet = require('helmet');
 const authenticate = require('./Authenticatin');
 const express=require('express');
 const app = express();
 app.use(express.json());
 app.use(log);
 app.use(authenticate);
+app.use(helmet());
 app.use(express.static('public'));
 const courses=[
     {id:1,name:'maths'},
