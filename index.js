@@ -8,6 +8,8 @@ const app = express();
 var fs = require('fs');
 var path = require('path')
 const config = require('config')
+app.set('view engine','pug')
+app.set('views','./views')
 
 app.use(express.json());
 app.use(log);
@@ -37,7 +39,10 @@ const courses=[
     {id:3,name:'english'},
 ];
 app.get('/',(req,res)=>{
-    res.send('welcome');
+    res.render('index',{
+       title:'Express App',
+       message:'Hello' 
+    })
 });
 
 app.get('/api/courses',(req,res)=>{
