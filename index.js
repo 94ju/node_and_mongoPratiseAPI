@@ -7,14 +7,21 @@ const express=require('express');
 const app = express();
 var fs = require('fs');
 var path = require('path')
+const config = require('config')
 
 app.use(express.json());
 app.use(log);
 app.use(authenticate);
 app.use(helmet());
-app.use(morgan('short'));
-var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
-app.use(morgan('combined', { stream: accessLogStream }))
+
+if(app.get('env')==='development'){
+    var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
+    app.use(morgan('combined', { stream: accessLogStream }))
+}
+if(app.get('env')==='production'){
+    var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
+    app.use(morgan('', { stream: accessLogStream }))
+}
 
 
 app.use(express.static('public'));
