@@ -5,15 +5,22 @@ const morgan =require('morgan');
 const authenticate = require('./Authenticatin');
 const express=require('express');
 const app = express();
-var fs = require('fs')
+var fs = require('fs');
+var path = require('path')
 
 app.use(express.json());
 app.use(log);
 app.use(authenticate);
 app.use(helmet());
 app.use(morgan('short'));
-app.use(morgan('common', {stream: fs.createWriteStream('./access.log', {flags: 'a'})}));
+var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
+app.use(morgan('combined', { stream: accessLogStream }))
+
+
 app.use(express.static('public'));
+
+
+
 const courses=[
     {id:1,name:'maths'},
     {id:2,name:'science'},
