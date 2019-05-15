@@ -1,7 +1,11 @@
 const Joi =require('joi');
+const log=  require('./logger');
+const authenticate = require('./Authenticatin');
 const express=require('express');
 const app = express();
 app.use(express.json());
+app.use(log);
+app.use(authenticate);
 const courses=[
     {id:1,name:'maths'},
     {id:2,name:'science'},
@@ -18,9 +22,7 @@ app.get('/api/courses',(req,res)=>{
 app.get('/api/courses/:id',(req,res)=>{
     const id=parseInt(req.params.id);
     const course = courses.find(c => c.id===id);
-    if(!course){
-        res.status(404).send('The cousres with the given id was not found');
-    }
+    if(!course) return res.status(404).send('The cousres with the given id was not found');
     res.send(course);
 });
 app.get('/api/courses/posts/:year/:month',(req,res)=>{
@@ -30,10 +32,7 @@ app.get('/api/courses/posts/:year/:month',(req,res)=>{
 app.post('/api/courses',(req,res)=>{
 
     const result =validateCourse(req.body);
-    if(result.error){
-        res.status(400).send(result.error.details[0].message);
-        return;
-    }
+    if(result.error) return res.status(400).send(result.error.details[0].message);
     const course ={
         id:courses.length+1,
         name:req.body.name
@@ -43,26 +42,19 @@ app.post('/api/courses',(req,res)=>{
 });
 
 app.put('/api/courses/:id',(req,res)=>{
-    //look up the course 
+  
     const id=parseInt(req.params.id);
     const course=courses.find(c=>c.id===id);
-    //if not exisit return 404
-    if(!course){
-        res.status(404).send('course not found')
-    }
+    if(!course) return res.status(404).send('course not found');
     const {error}=validateCourse(req.body);
-    if(error){
-        res.status(400).send(error.details[0].message);
-        return;
-    }
-    //update course
+    if(error) return  res.status(400).send(error.details[0].message);
     course.name=req.body.name;
-    //return the update course
     res.send(course);
 });
 app.delete('/api/courses/:id',(req,res)=>{
     const id=parseInt(req.params.id);
     const course=courses.find(c=>c.id===id);
+    if (!course) return res.status(404).send('The course with the given id was not found');
     const index =courses.indexOf(course);
     courses.splice(index,1);
     res.send(course)
