@@ -1,5 +1,5 @@
-const express = require('require');
-const router = express.router();
+const express = require('express');
+const router = express.Router();
 const Joi =require('joi');
 
 const courses=[
