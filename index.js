@@ -1,5 +1,4 @@
-const Joi =require('joi');
-const log=  require('./logger');
+const log=  require('./middlware/logger');
 const helmet = require('helmet');
 const morgan =require('morgan');
 const authenticate = require('./Authenticatin');
